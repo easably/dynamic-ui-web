@@ -1,36 +1,59 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
-import { FC, useEffect, useState } from 'react'
-import { AuthManager, User } from './api/auth'
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Fade,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { FC, useState } from 'react'
+import { useLoginMutation } from './store/apiSlice'
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import { logout, User } from './store/authSlice'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 export const App = () => {
-  const auth = AuthManager.getInstance()
-  const [user, setUser] = useState(auth.getCurrentUser())
-
-  useEffect(() => {}, [auth.isAuthenticated])
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth)
 
   return (
-    <Container sx={{ my: 2, mx: 0 }}>{auth.isAuthenticated && user ? <HomeScreen user={user} auth={auth}/> : <LoginForm auth={auth} />}</Container>
+    <Container sx={{ my: 2, mx: 0 }}>
+      {isAuthenticated && user ? <HomeScreen user={user} /> : <LoginForm />}
+    </Container>
   )
 }
 
-export const HomeScreen: FC<{user: User, auth: AuthManager}> = ({user, auth}) => {
+export const HomeScreen: FC<{ user: User }> = ({ user }) => {
+  const dispath = useAppDispatch()
 
+  const onPressSighOut = () => {
+    dispath(logout())
+  }
 
   return (
     <Box>
-      <Button onClick={() => auth.signOut()}>++</Button>
-      <p>{user.firstName}</p>
-      <p>{user.lastname}</p>
+      <Paper elevation={10} sx={{ p: 1, display: 'flex', justifyContent: 'space-between' }}>
+        <Avatar
+          alt={`${user.firstName} ${user.lastName}`}
+          src={'https://alerts.taqdev.com/' + user.avatar}
+        />
+        <Button onClick={onPressSighOut} variant="contained" endIcon={<LogoutIcon />}>
+          Signout
+        </Button>
+      </Paper>
     </Box>
   )
 }
 
-export const LoginForm: FC<{ auth: AuthManager }> = ({ auth }) => {
-  const [username, setUsername] = useState('')
+export const LoginForm = () => {
+  const [login, { isLoading }] = useLoginMutation()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const onPressSighIn = () => {
-    auth.signIn(username, password)
+  const onPressSighIn = async () => {
+    await login({ email: email, password: password }).unwrap()
   }
 
   return (
@@ -40,8 +63,8 @@ export const LoginForm: FC<{ auth: AuthManager }> = ({ auth }) => {
         variant="outlined"
         size="medium"
         label={'Email'}
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <TextField
         variant="outlined"
@@ -54,21 +77,18 @@ export const LoginForm: FC<{ auth: AuthManager }> = ({ auth }) => {
       />
       <Button
         variant="contained"
-        disabled={username.length === 0 || password.length === 0}
+        disabled={email.length === 0 || password.length === 0}
         onClick={onPressSighIn}>
         Sign in
+        <Fade
+          in={isLoading}
+          style={{
+            transitionDelay: isLoading ? '200ms' : '0ms',
+          }}
+          unmountOnExit>
+          <CircularProgress size={20} sx={{ ml: 1 }} color="inherit" />
+        </Fade>
       </Button>
     </Box>
   )
 }
-
-// export const InputField: FC<InputFieldProps> = ({placeholder}) => {
-//   return (
-//     <Box sx={{p: 0, m: 0}}>
-//       <Typography variant='h3' component="h1" sx={{ pb: 1 }}>
-//         FieldName
-//       </Typography>
-//       <TextField id="outlined-basic" variant="outlined" size="small" placeholder={placeholder}/>
-//     </Box>
-//   )
-// }
