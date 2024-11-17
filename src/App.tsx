@@ -7,6 +7,7 @@ import { CollectionView } from './components/Collection'
 import { FC } from 'react'
 import { User } from './store/authSlice'
 import { AppHeader } from './components/AppHeader'
+import { CollectionItemView } from './components/CollectionItemView'
 
 export const App = () => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth)
@@ -24,6 +25,10 @@ export const App = () => {
           {
             path: 'collections/:collectionName',
             element: <CollectionView />,
+          },
+          {
+            path: 'collections/:collectionName/:id',
+            element: <CollectionItemView />,
           },
         ],
       },

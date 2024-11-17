@@ -11,7 +11,7 @@ export const CollectionsScreen: FC<{ user: User }> = () => {
   const { data, isLoading } = useGetSchemeQuery()
 
   const navigate = useNavigate()
-  const onPressCollectionItem = (collectionName: string, tableMeta: TableMetaData) => {
+  const onPressCollection = (collectionName: string, tableMeta: TableMetaData) => {
     navigate(`/collections/${collectionName}`, { state: { tableMeta: tableMeta } })
   }
 
@@ -22,7 +22,7 @@ export const CollectionsScreen: FC<{ user: User }> = () => {
           <List disablePadding>
             {data?.map((m) => (
               <div key={m.collection}>
-                <ListItemButton onClick={() => onPressCollectionItem(m.collection, m)}>
+                <ListItemButton onClick={() => onPressCollection(m.collection, m)}>
                   <ListItemText primary={m.translations['en']} />
                   <ListItemIcon>
                     <ArrowForwardIosRoundedIcon />

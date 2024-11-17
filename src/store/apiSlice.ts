@@ -82,14 +82,14 @@ export const apiSlice = createApi({
         return tablesMeta
       },
     }),
-    getTableItems: builder.query<any, string>({
+    getTableItems: builder.query<Array<{[key: string]: any}>, string>({
       query: (tableName: string) => ({ url: ApiEndpoints.getTableItems, method: 'POST', body: { table: tableName } }),
-      transformResponse: (res) => {
-        console.log(res)
-        return res
-      },
     }),
   }),
 })
 
-export const { useGetSchemeQuery, useLoginMutation } = apiSlice
+export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery } = apiSlice
+
+interface TableItem {
+  id: number,
+}
