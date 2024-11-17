@@ -7,6 +7,7 @@ import { Field, InputMeta, SelectMeta, TableMetaData, TimepickerMeta } from '../
 enum ApiEndpoints {
   signIn = '/rest/signin',
   getScheme = '/rest/get-schema-db',
+  getTableItems = '/rest/5c_v5/get'
 }
 
 export const apiSlice = createApi({
@@ -79,6 +80,13 @@ export const apiSlice = createApi({
           tablesMeta.push(meta)
         }
         return tablesMeta
+      },
+    }),
+    getTableItems: builder.query<any, string>({
+      query: (tableName: string) => ({ url: ApiEndpoints.getTableItems, method: 'POST', body: { table: tableName } }),
+      transformResponse: (res) => {
+        console.log(res)
+        return res
       },
     }),
   }),
