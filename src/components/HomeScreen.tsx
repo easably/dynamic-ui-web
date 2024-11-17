@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { logout, User } from '../store/authSlice'
 import { useAppDispatch } from '../store/hooks'
 import {

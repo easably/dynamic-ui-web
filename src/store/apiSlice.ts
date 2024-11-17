@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials } from './authSlice'
 import { RootState } from './store'
 import { DBSchema } from '../types/dbScheme'
+import { Field, InputMeta, SelectMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
 
 enum ApiEndpoints {
   signIn = '/rest/signin',
@@ -73,7 +74,6 @@ export const apiSlice = createApi({
                 meta.fields.push(element as Field<TimepickerMeta>)
                 break
             }
-           
           })
 
           tablesMeta.push(meta)
@@ -85,52 +85,3 @@ export const apiSlice = createApi({
 })
 
 export const { useGetSchemeQuery, useLoginMutation } = apiSlice
-
-interface Translations {
-  [key: string]: string
-}
-
-export interface TableMetaData {
-  collection: string
-  display_field: string
-  display_template: 'list' | 'table'
-  hidden: boolean
-  fields: Field<InputMeta | SelectMeta | TimepickerMeta>[]
-  translations: Translations
-}
-
-interface Field<T> {
-  field: string
-  data_type: 'string' | 'int' | 'timestamp'
-  display_template: 'input' | 'select' | 'timepicker'
-  meta: T
-}
-
-interface InputMeta {
-  display_name: string
-  editable: boolean
-  icon: string
-  is_nullable: boolean
-  required: boolean
-  translations: Translations
-}
-
-interface SelectMeta {
-  display_name: string
-  editable: boolean
-  icon: string
-  initaial_value: string
-  values: string[]
-  is_nullable: boolean
-  required: boolean
-  translations: Translations
-}
-
-interface TimepickerMeta {
-  display_name: string
-  editable: boolean
-  icon: string
-  is_nullable: boolean
-  required: boolean
-  translations: Translations
-}
