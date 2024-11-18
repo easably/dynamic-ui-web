@@ -12,7 +12,7 @@ export const LoginScreen = () => {
     }
   
     return (
-      <Box sx={{ flexDirection: 'column', display: 'flex', gap: 2 }}>
+      <Box sx={{ flexDirection: 'column', display: 'flex', gap: 2, m: 2 }}>
         <Typography variant="h3">Sign in</Typography>
         <TextField
           variant="outlined"

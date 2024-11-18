@@ -36,7 +36,6 @@ export const CollectionsScreen: FC<{ user: User }> = () => {
           </List>
         </Paper>
       )}
-      <Outlet />
     </Box>
   )
 }
