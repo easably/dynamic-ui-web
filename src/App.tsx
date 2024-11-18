@@ -8,6 +8,8 @@ import { FC } from 'react'
 import { User } from './store/authSlice'
 import { AppHeader } from './components/AppHeader'
 import { CollectionItemView } from './components/CollectionItemView'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 export const App = () => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth)
@@ -49,12 +51,14 @@ export const App = () => {
   )
 
   return (
-    <RouterProvider
-      router={router}
-      future={{
-        v7_startTransition: true,
-      }}
-    />
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <RouterProvider
+        router={router}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+    </LocalizationProvider>
   )
 }
 
