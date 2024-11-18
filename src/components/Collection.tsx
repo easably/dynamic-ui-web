@@ -3,8 +3,10 @@ import { useGetTableItemsQuery } from '../store/apiSlice'
 import { TableMetaData } from '../types/tableMetaData'
 import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Paper } from '@mui/material'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
+import { useAppSelector } from '../store/hooks'
 
 export const CollectionView = () => {
+  const { selectedLang } = useAppSelector((state) => state.language)
   const location = useLocation()
   const navigate = useNavigate()
   const { collectionName } = useParams()
@@ -13,8 +15,8 @@ export const CollectionView = () => {
 
   const { data, isLoading } = useGetTableItemsQuery(collectionName!)
 
-  const onPressCollectionItem = (id: number, itemIndex: number ) => {
-    navigate(`/collections/${collectionName}/${id}`, { state: { tableMeta: tableMeta, fields: data![itemIndex] } } )
+  const onPressCollectionItem = (id: number, itemIndex: number) => {
+    navigate(`/collections/${collectionName}/${id}`, { state: { tableMeta: tableMeta, fields: data![itemIndex] } })
   }
 
   return (

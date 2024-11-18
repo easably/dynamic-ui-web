@@ -3,6 +3,7 @@ import { apiSlice } from './apiSlice'
 import { authSlice } from './authSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
+import { languageSlice } from './languageSlice'
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: persistedAuthReducer,
+    language: languageSlice.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(apiSlice.middleware),

@@ -6,8 +6,10 @@ import { useGetSchemeQuery } from '../store/apiSlice'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
+import { useAppSelector } from '../store/hooks'
 
 export const CollectionsScreen: FC<{ user: User }> = () => {
+  const { selectedLang } = useAppSelector((state) => state.language)
   const { data, isLoading } = useGetSchemeQuery()
 
   const navigate = useNavigate()
@@ -23,7 +25,7 @@ export const CollectionsScreen: FC<{ user: User }> = () => {
             {data?.map((m) => (
               <div key={m.collection}>
                 <ListItemButton onClick={() => onPressCollection(m.collection, m)}>
-                  <ListItemText primary={m.translations['en']} />
+                  <ListItemText primary={m.translations[selectedLang]} />
                   <ListItemIcon>
                     <ArrowForwardIosRoundedIcon />
                   </ListItemIcon>
