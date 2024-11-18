@@ -9,7 +9,6 @@ export const AppHeader: FC<{ user: User }> = ({ user }) => {
   const dispath = useAppDispatch()
   const { selectedLang } = useAppSelector((state) => state.language)
 
-  
   const onPressSighOut = () => {
     dispath(logout())
   }
@@ -26,7 +25,7 @@ export const AppHeader: FC<{ user: User }> = ({ user }) => {
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <TextField size="small" select onChange={(e) => onChangeLang(e.target.value)} value={selectedLang}>
-              {Object.keys(Languages).map((option) => (
+              {Languages.map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
@@ -38,15 +37,6 @@ export const AppHeader: FC<{ user: User }> = ({ user }) => {
             </Button>
           </Box>
         </Box>
-
-        {/* <Fade
-            in={isLoading}
-            unmountOnExit
-            style={{
-              transitionDelay: isLoading ? '200ms' : '0ms',
-            }}>
-            <LinearProgress />
-          </Fade> */}
       </Paper>
     </>
   )
