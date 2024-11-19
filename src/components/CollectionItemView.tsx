@@ -1,18 +1,30 @@
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
 import { Box, Button, Divider, List, ListItem, Paper, Typography } from '@mui/material'
 
 import { TableFieldSwitcher } from './fields/TableFieldSwitcher'
-import { useAppSelector } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
+import { apiSlice } from '../store/apiSlice'
 
 export const CollectionItemView = () => {
+  const dispatch = useAppDispatch()
   const { selectedLang } = useAppSelector((state) => state.language)
   const location = useLocation()
+  const navigate = useNavigate()
   const { id } = useParams()
   const { tableMeta, fields } = location.state as { tableMeta: TableMetaData; fields: { [key: string]: any } }
 
-  const onPressDelete = () => {}
+  const onPressDelete = async () => {
+    const res = await dispatch(
+      apiSlice.endpoints.deleteCollectionItem.initiate({
+        collection: tableMeta.collection,
+        itemId: Number(id),
+      }),
+    )
+		console.log(res)
+    setTimeout(() => navigate(-1), 200)
+  }
 
   return (
     <Box>

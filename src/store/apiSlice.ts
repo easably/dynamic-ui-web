@@ -9,6 +9,7 @@ enum ApiEndpoints {
   getScheme = '/rest/get-schema-db',
   getTableItems = '/rest/5c_v5/get',
   addCollectionItem = '/rest/5c_v5/add',
+  deleteCollectionItem = '/rest/5c_v5/delete',
 }
 
 interface AddCollectionItemArguments {
@@ -98,6 +99,17 @@ export const apiSlice = createApi({
           insert: {...items}
         }
         return { url: ApiEndpoints.addCollectionItem, method: 'POST', body: body }
+      },
+    }),
+    deleteCollectionItem: builder.query<void, {collection: string, itemId: number}>({
+      query: ( {collection, itemId } ) => {
+        let body = {
+          table: collection,
+          conditions: {
+            id: itemId
+          }
+        }
+        return { url: ApiEndpoints.deleteCollectionItem, method: 'POST', body: body }
       },
     })
   }),
