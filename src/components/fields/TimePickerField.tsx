@@ -14,6 +14,7 @@ export const TimepickerField: FC<SelectFieldProps> = ({ value, onChange, field }
     <DateTimePicker
       label=""
       defaultValue={dayjs(value)}
+      value={dayjs(value)}
       sx={{ minWidth: 250 }}
       onChange={(e) => onChange(field.field, e?.toISOString())}
     />

@@ -1,10 +1,11 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { TableMetaData } from '../../types/tableMetaData'
 import { Box, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
 import { TableFieldSwitcher } from '../fields/TableFieldSwitcher'
 import SaveIcon from '@mui/icons-material/Save'
 import { useState } from 'react'
+import { apiSlice, useAddCollectionItemQuery } from '../../store/apiSlice'
 
 export const AddCollectionItem = () => {
   const { selectedLang } = useAppSelector((state) => state.language)
@@ -12,6 +13,7 @@ export const AddCollectionItem = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { tableMeta } = location.state as { tableMeta: TableMetaData }
+  const dispatch = useAppDispatch()
 
   const createItems = () => {
     let fields = new Map()
@@ -41,9 +43,17 @@ export const AddCollectionItem = () => {
     setNewItems(items)
   }
 
-	const onPressSaveItem = () => {
-		console.log(Object.fromEntries(newItems));
-	}
+  const onPressSaveItem = async () => {
+    console.log(Object.fromEntries(newItems))
+    const res = await dispatch(
+      apiSlice.endpoints.addCollectionItem.initiate({
+        collection: collectionName!,
+        items: Object.fromEntries(newItems),
+      }),
+    )
+		console.log(res)
+    setTimeout(() => navigate(-1), 200)
+  }
 
   return (
     <Box>
@@ -64,7 +74,7 @@ export const AddCollectionItem = () => {
                 }}>
                 <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
                 <TableFieldSwitcher
-									onChange={onChangeItem}
+                  onChange={onChangeItem}
                   field={tableMeta.fields.find((e) => e.field === el.field)!}
                   value={newItems.get(el.field)}
                 />

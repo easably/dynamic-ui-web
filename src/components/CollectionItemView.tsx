@@ -1,9 +1,10 @@
 import { useLocation, useParams } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
-import { Box, Divider, List, ListItem, Paper, Typography } from '@mui/material'
+import { Box, Button, Divider, List, ListItem, Paper, Typography } from '@mui/material'
 
 import { TableFieldSwitcher } from './fields/TableFieldSwitcher'
 import { useAppSelector } from '../store/hooks'
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 
 export const CollectionItemView = () => {
   const { selectedLang } = useAppSelector((state) => state.language)
@@ -11,11 +12,19 @@ export const CollectionItemView = () => {
   const { id } = useParams()
   const { tableMeta, fields } = location.state as { tableMeta: TableMetaData; fields: { [key: string]: any } }
 
+  const onPressDelete = () => {}
+
   return (
     <Box>
-      <Typography variant="h4" sx={{ mt: 2 }}>
-        {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field]}`}
-      </Typography>
+      <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="h4">
+          {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field]}`}
+        </Typography>
+        <Button variant="contained" color="error" startIcon={<DeleteOutlineRoundedIcon />} onClick={onPressDelete}>
+          Delete
+        </Button>
+      </Box>
+
       <Paper elevation={2} sx={{ mt: 2 }}>
         <List disablePadding>
           {tableMeta.fields.map((el, index) => (
@@ -30,7 +39,7 @@ export const CollectionItemView = () => {
                 }}>
                 <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
                 <TableFieldSwitcher
-                onChange={() => {}}
+                  onChange={() => {}}
                   field={tableMeta.fields.find((e) => e.field === el.field)!}
                   value={fields[el.field]}
                 />

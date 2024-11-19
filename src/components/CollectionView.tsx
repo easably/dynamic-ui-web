@@ -18,7 +18,7 @@ export const CollectionView = () => {
   const onPressAddItem = () => {
     navigate(`/collections/${collectionName}/add`, { state: { tableMeta: tableMeta } })
   }
-
+  
   return (
     <Box height={'100%'}>
       <Typography variant="h4" sx={{ mt: 2 }}>

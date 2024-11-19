@@ -7,7 +7,13 @@ import { Field, InputMeta, SelectMeta, TableMetaData, TimepickerMeta } from '../
 enum ApiEndpoints {
   signIn = '/rest/signin',
   getScheme = '/rest/get-schema-db',
-  getTableItems = '/rest/5c_v5/get'
+  getTableItems = '/rest/5c_v5/get',
+  addCollectionItem = '/rest/5c_v5/add',
+}
+
+interface AddCollectionItemArguments {
+  collection: string;
+  items: { [key: string]: any }; 
 }
 
 export const apiSlice = createApi({
@@ -85,11 +91,17 @@ export const apiSlice = createApi({
     getTableItems: builder.query<Array<{[key: string]: any}>, string>({
       query: (tableName: string) => ({ url: ApiEndpoints.getTableItems, method: 'POST', body: { table: tableName } }),
     }),
+    addCollectionItem: builder.query<void, AddCollectionItemArguments>({
+      query: ( {collection, items} ) => {
+        let body = {
+          table: collection,
+          insert: {...items}
+        }
+        return { url: ApiEndpoints.addCollectionItem, method: 'POST', body: body }
+      },
+    })
   }),
+ 
 })
 
-export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery } = apiSlice
-
-interface TableItem {
-  id: number,
-}
+export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery, useAddCollectionItemQuery } = apiSlice
