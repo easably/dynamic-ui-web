@@ -5,10 +5,17 @@ import { SelectField } from "./SelectField";
 import { TimepickerField } from "./TimePickerField";
 
 
-export const TableFieldSwitcher: FC<{ field: Field<InputMeta | SelectMeta | TimepickerMeta>; value: any }> = ({ field, value }) => {
+type TableFieldSwitcherProps= {
+  field: Field<InputMeta | SelectMeta | TimepickerMeta>
+  value: any
+  onChange: (key: string, value: any) => void
+}
+
+export const TableFieldSwitcher: FC<TableFieldSwitcherProps> = ({ field, value, onChange }) => {
+  
     switch (field.display_template) {
       case 'input':
-        return <InputField value={value} />
+        return <InputField value={value} onChange={onChange} field={field.field} />
       case 'select':
         return <SelectField value={value} field={field as Field<SelectMeta>} />
       case 'timepicker':

@@ -30,6 +30,7 @@ export const CollectionItemView = () => {
                 }}>
                 <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
                 <TableFieldSwitcher
+                onChange={() => {}}
                   field={tableMeta.fields.find((e) => e.field === el.field)!}
                   value={fields[el.field]}
                 />
