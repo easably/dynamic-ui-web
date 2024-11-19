@@ -15,9 +15,9 @@ export const TableFieldSwitcher: FC<TableFieldSwitcherProps> = ({ field, value, 
   
     switch (field.display_template) {
       case 'input':
-        return <InputField value={value} onChange={onChange} field={field.field} />
+        return <InputField value={value} onChange={onChange} field={field as Field<InputMeta>} />
       case 'select':
-        return <SelectField value={value} field={field as Field<SelectMeta>} />
+        return <SelectField value={value} onChange={onChange} field={field as Field<SelectMeta>} />
       case 'timepicker':
         return <TimepickerField value={value} />
     }

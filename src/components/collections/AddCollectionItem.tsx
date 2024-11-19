@@ -36,6 +36,8 @@ export const AddCollectionItem = () => {
   const [newItems, setNewItems] = useState<Map<string, any>>(createItems())
 
   const onChangeItem = (key: string, value: any) => {
+		console.log(key, value);
+		
     let items = new Map(newItems)
     items.set(key, value)
     setNewItems(items)
