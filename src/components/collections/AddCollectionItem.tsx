@@ -5,7 +5,7 @@ import { Box, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/mater
 import { TableFieldSwitcher } from '../fields/TableFieldSwitcher'
 import SaveIcon from '@mui/icons-material/Save'
 import { useState } from 'react'
-import { apiSlice, useAddCollectionItemQuery } from '../../store/apiSlice'
+import { apiSlice } from '../../store/apiSlice'
 
 export const AddCollectionItem = () => {
   const { selectedLang } = useAppSelector((state) => state.language)
@@ -44,14 +44,12 @@ export const AddCollectionItem = () => {
   }
 
   const onPressSaveItem = async () => {
-    console.log(Object.fromEntries(newItems))
-    const res = await dispatch(
+    await dispatch(
       apiSlice.endpoints.addCollectionItem.initiate({
         collection: collectionName!,
         items: Object.fromEntries(newItems),
       }),
     )
-		console.log(res)
     setTimeout(() => navigate(-1), 200)
   }
 

@@ -10,6 +10,7 @@ enum ApiEndpoints {
   getTableItems = '/rest/5c_v5/get',
   addCollectionItem = '/rest/5c_v5/add',
   deleteCollectionItem = '/rest/5c_v5/delete',
+  updateCollectionItem = '/rest/5c_v5/put',
 }
 
 interface AddCollectionItemArguments {
@@ -111,9 +112,21 @@ export const apiSlice = createApi({
         }
         return { url: ApiEndpoints.deleteCollectionItem, method: 'POST', body: body }
       },
+    }),
+    updateCollectionItem: builder.query<void, {collection: string, updates: {[key: string]: any}, itemId: number}>({
+      query: ( {collection, itemId, updates } ) => {
+        let body = {
+          table: collection,
+          updates: updates,
+          conditions: {
+            id: itemId
+          }
+        }
+        return { url: ApiEndpoints.updateCollectionItem, method: 'POST', body: body }
+      },
     })
   }),
  
 })
 
-export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery, useAddCollectionItemQuery } = apiSlice
+export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery } = apiSlice
