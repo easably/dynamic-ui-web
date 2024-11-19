@@ -13,6 +13,7 @@ export const SelectField: FC<SelectFieldProps> = ({ field, value, onChange }) =>
     <TextField
       select
       label="Select"
+      sx={{minWidth: 250}}
       value={value === '' ? field.meta.initaial_value : value}
       onChange={(e) => onChange(field.field, e.target.value)}>
       {field.meta.values.map((option) => (

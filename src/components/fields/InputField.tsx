@@ -11,7 +11,7 @@ type InputFieldProps = {
 export const InputField: FC<InputFieldProps> = ({ field, value, onChange }) => {   
     return (
       <TextField
-        // label={value}
+        sx={{minWidth: 250}}
         variant="outlined"
         value={value}
         onChange={(e) => onChange(field.field, e.target.value)}

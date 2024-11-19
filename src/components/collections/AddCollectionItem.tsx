@@ -36,12 +36,14 @@ export const AddCollectionItem = () => {
   const [newItems, setNewItems] = useState<Map<string, any>>(createItems())
 
   const onChangeItem = (key: string, value: any) => {
-		console.log(key, value);
-		
     let items = new Map(newItems)
     items.set(key, value)
     setNewItems(items)
   }
+
+	const onPressSaveItem = () => {
+		console.log(Object.fromEntries(newItems));
+	}
 
   return (
     <Box>
@@ -73,7 +75,7 @@ export const AddCollectionItem = () => {
         </List>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Fab color="primary" aria-label="add">
+        <Fab color="primary" aria-label="add" onClick={onPressSaveItem}>
           <SaveIcon />
         </Fab>
       </Box>
