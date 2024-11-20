@@ -22,4 +22,5 @@ export const TableFieldEditorSwitcher: FC<TableFieldSwitcherProps> = ({ field, v
     case 'table':
       return <TableFieldView value={value} field={field as Field<TableMeta>} />
   }
+  
 }
