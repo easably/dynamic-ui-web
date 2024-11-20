@@ -4,17 +4,18 @@ interface Translations {
 
 export interface TableMetaData {
   collection: string
-  display_field?: string
-  display_template: 'list' | 'table' | 'reference'
+  display_field: string
+  display_template: 'list' | 'table' 
   hidden: boolean
-  fields: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>[]
+  fields: Field<InputMeta | SelectMeta | TimepickerMeta | ReferenceFieldMeta >[] 
   translations: Translations
 }
 
 export interface Field<T> {
   field: string
-  data_type: 'string' | 'int' | 'timestamp'
+  data_type: 'string' | 'int' | 'timestamp' | 'reference'
   display_template: 'input' | 'select' | 'timepicker' | 'table'
+  join?: string[]
   meta: T
 }
 
@@ -55,3 +56,13 @@ export interface TableMeta {
   required: boolean
   translations: Translations
 }
+
+export interface ReferenceFieldMeta {
+  editable: boolean
+  icon: string
+  columns: string[]
+  is_nullable: boolean
+  required: boolean
+  translations: Translations
+}
+

@@ -2,7 +2,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials } from './authSlice'
 import { RootState } from './store'
 import { DBSchema } from '../types/dbScheme'
-import { Field, InputMeta, SelectMeta, TableMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
+import {
+  Field,
+  InputMeta,
+  ReferenceFieldMeta,
+  SelectMeta,
+  TableMeta,
+  TableMetaData,
+  TimepickerMeta,
+} from '../types/tableMetaData'
 
 enum ApiEndpoints {
   signIn = '/rest/signin',
@@ -14,8 +22,8 @@ enum ApiEndpoints {
 }
 
 interface AddCollectionItemArguments {
-  collection: string;
-  items: { [key: string]: any }; 
+  collection: string
+  items: { [key: string]: any }
 }
 
 export const apiSlice = createApi({
@@ -54,8 +62,6 @@ export const apiSlice = createApi({
     getScheme: builder.query<TableMetaData[], void>({
       query: () => ({ url: ApiEndpoints.getScheme, method: 'POST' }),
       transformResponse: (response: DBSchema): TableMetaData[] => {
-    
-        
         let tables = Object.keys(response.custom)
         let tablesMeta: TableMetaData[] = []
 
@@ -73,7 +79,7 @@ export const apiSlice = createApi({
               fields: [],
               translations: tableMeta.translations,
             }
-  
+
             tableMeta.fields.forEach((element) => {
               switch (element.display_template) {
                 case 'input':
@@ -86,55 +92,84 @@ export const apiSlice = createApi({
                   meta.fields.push(element as Field<TimepickerMeta>)
                   break
                 case 'table':
-                  console.log('table');
                   meta.fields.push(element as Field<TableMeta>)
                   break
               }
             })
-  
+
             tablesMeta.push(meta)
           }
         }
         return tablesMeta
       },
     }),
-    getTableItems: builder.query<Array<{[key: string]: any}>, string>({
-      query: (tableName: string) => ({ url: ApiEndpoints.getTableItems, method: 'POST', body: { table: tableName } }),
+    getTableItems: builder.query<Array<{ [key: string]: any }>, TableMetaData>({
+      query: (tableMeta: TableMetaData) => {
+        let fields: string[] = []
+        let joins: Array<{
+          table: string
+          first: string
+          second: string
+          type: string
+        }> = []
+        tableMeta.fields.forEach((f) => {
+          if (f.data_type !== 'reference') {
+            fields.push(`${tableMeta.collection}.${f.field}`)
+          } else {
+            let field = f as Field<ReferenceFieldMeta>
+            joins.push({
+              table: f.field,
+              first: f.join![0],
+              second: f.join![1],
+              type: 'LEFT',
+            })
+            field.meta.columns.forEach((m) => fields.push(`${field.field}.${m}`))
+          }
+        })
+
+        let body: { [key: string]: any } = {
+          table: tableMeta.collection,
+          fields: [`${tableMeta.collection}.id`, ...fields],
+          joins: joins,
+        }
+        console.log(JSON.stringify(body))
+
+        return { url: ApiEndpoints.getTableItems, method: 'POST', body: body }
+      },
     }),
     addCollectionItem: builder.query<void, AddCollectionItemArguments>({
-      query: ( {collection, items} ) => {
+      query: ({ collection, items }) => {
         let body = {
           table: collection,
-          insert: {...items}
+          insert: { ...items },
         }
         return { url: ApiEndpoints.addCollectionItem, method: 'POST', body: body }
       },
     }),
-    deleteCollectionItem: builder.query<void, {collection: string, itemId: number}>({
-      query: ( {collection, itemId } ) => {
+    deleteCollectionItem: builder.query<void, { collection: string; itemId: number }>({
+      query: ({ collection, itemId }) => {
         let body = {
           table: collection,
           conditions: {
-            id: itemId
-          }
+            id: itemId,
+          },
         }
         return { url: ApiEndpoints.deleteCollectionItem, method: 'POST', body: body }
       },
     }),
-    updateCollectionItem: builder.query<void, {collection: string, updates: {[key: string]: any}, itemId: number}>({
-      query: ( {collection, itemId, updates } ) => {
+    updateCollectionItem: builder.query<void, { collection: string; updates: { [key: string]: any }; itemId: number }>({
+      query: ({ collection, itemId, updates }) => {
         let body = {
           table: collection,
           updates: updates,
           conditions: {
-            id: itemId
-          }
+            id: itemId,
+          },
         }
         return { url: ApiEndpoints.updateCollectionItem, method: 'POST', body: body }
       },
-    })
+    }),
   }),
- 
 })
 
 export const { useGetSchemeQuery, useLoginMutation, useGetTableItemsQuery } = apiSlice

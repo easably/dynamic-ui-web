@@ -1,14 +1,14 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { TableMetaData } from '../types/tableMetaData'
+import { Field, InputMeta, SelectMeta, TableMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
 import { Box, Button, CircularProgress, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
 
-import { TableFieldEditorSwitcher } from './fields/TableFieldSwitcher'
+import { TableFieldEditorSwitcher } from './fields/ TableFieldEditorSwitche'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import { apiSlice } from '../store/apiSlice'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import dayjs from 'dayjs'
 
 export const CollectionItemView = () => {
@@ -72,11 +72,6 @@ export const CollectionItemView = () => {
     setEditMode(false)
   }
 
-  const convertValue = (value: any): string => {
-    const parsedDate = dayjs(value, ['YYYY-MM-DDTHH:mm:ss.sssZ'], false)
-    return parsedDate.isValid() ? dayjs(value).format('LLL') : String(value)
-  }
-
   const onChangeItem = (key: string, value: any) => {
     let items = new Map(newItems)
     items.set(key, value)
@@ -87,7 +82,7 @@ export const CollectionItemView = () => {
     <Box>
       <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h4">
-          {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field ?? ""]}`}
+          {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field ?? '']}`}
         </Typography>
         <Button variant="contained" color="error" startIcon={<DeleteOutlineRoundedIcon />} onClick={onPressDelete}>
           Delete
@@ -106,7 +101,9 @@ export const CollectionItemView = () => {
                   alignItems: 'flex-start',
                   gap: 1,
                 }}>
-                <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  {el.meta.translations[selectedLang]}
+                </Typography>
                 {editMode ? (
                   <TableFieldEditorSwitcher
                     onChange={onChangeItem}
@@ -114,7 +111,10 @@ export const CollectionItemView = () => {
                     value={newItems.get(el.field)}
                   />
                 ) : (
-                  <p>{convertValue(newItems.get(el.field))}</p>
+                  <TableFieldLookupSwitcher
+                    value={newItems.get(el.field)}
+                    field={tableMeta.fields.find((e) => e.field === el.field)!}
+                  />
                 )}
               </ListItem>
               {index <= tableMeta.fields.length - 2 && <Divider />}
@@ -136,5 +136,36 @@ export const CollectionItemView = () => {
         </Fab>
       </Box>
     </Box>
+  )
+}
+
+type TableFieldLookupSwitcherProps = {
+  field: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>
+  value: any
+}
+
+const TableFieldLookupSwitcher: FC<TableFieldLookupSwitcherProps> = ({ value, field }) => {
+
+  const convertValue = (value: any): string => {
+    const parsedDate = dayjs(value, ['YYYY-MM-DDTHH:mm:ss.sssZ'], false)
+    return parsedDate.isValid() ? dayjs(value).format('LLL') : String(value)
+  }
+
+  switch (field.display_template) {
+    case 'input':
+      return <Typography variant="body1">{value}</Typography>
+    case 'select':
+      return <Typography variant="body1">{value}</Typography>
+    case 'timepicker':
+      return <Typography variant="body1">{convertValue(value)}</Typography>
+    case 'table':
+      return <div>table</div>
+      // return <TableLoockup value={value}/>
+  }
+}
+
+const TableLoockup: FC<{value: TableMeta}> = ({value}) => {
+  return (
+    <div>{value.columns}</div>
   )
 }

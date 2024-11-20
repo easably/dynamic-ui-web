@@ -23,7 +23,7 @@ export const CollectionListView: FC<CollectionViewProps> = ({ tableMeta, data, c
     return (
       <List disablePadding>
         {data.map((el, index) => (
-          <div key={el['id']}>
+          <div key={el['id'] + index}>
             <ListItemButton onClick={() => onPressCollectionItem(el['id'], index)}>
               <ListItemText primary={el[primaryField]} />
               <ListItemIcon>

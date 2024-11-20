@@ -4,7 +4,7 @@ import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Paper }
 
 import { useGetSchemeQuery } from '../store/apiSlice'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
-import { Outlet, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
 import { useAppSelector } from '../store/hooks'
 
