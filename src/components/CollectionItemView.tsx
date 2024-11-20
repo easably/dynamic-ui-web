@@ -183,7 +183,7 @@ const TableFieldLookupSwitcher: FC<TableFieldLookupSwitcherProps> = ({ value, fi
 
 export const TableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<TableMeta> }> = ({ value, field }) => {
 
-  const { selectedLang } = useAppSelector((state) => state.language)
+  // const { selectedLang } = useAppSelector((state) => state.language)
 
   return (
     <TableContainer component={Paper}>
