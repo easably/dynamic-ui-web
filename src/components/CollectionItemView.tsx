@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
 import { Box, Button, CircularProgress, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
 
-import { TableFieldSwitcher } from './fields/TableFieldSwitcher'
+import { TableFieldEditorSwitcher } from './fields/TableFieldSwitcher'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import { apiSlice } from '../store/apiSlice'
@@ -87,7 +87,7 @@ export const CollectionItemView = () => {
     <Box>
       <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h4">
-          {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field]}`}
+          {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field ?? ""]}`}
         </Typography>
         <Button variant="contained" color="error" startIcon={<DeleteOutlineRoundedIcon />} onClick={onPressDelete}>
           Delete
@@ -108,7 +108,7 @@ export const CollectionItemView = () => {
                 }}>
                 <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
                 {editMode ? (
-                  <TableFieldSwitcher
+                  <TableFieldEditorSwitcher
                     onChange={onChangeItem}
                     field={tableMeta.fields.find((e) => e.field === el.field)!}
                     value={newItems.get(el.field)}

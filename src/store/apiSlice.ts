@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials } from './authSlice'
 import { RootState } from './store'
 import { DBSchema } from '../types/dbScheme'
-import { Field, InputMeta, SelectMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
+import { Field, InputMeta, SelectMeta, TableMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
 
 enum ApiEndpoints {
   signIn = '/rest/signin',
@@ -54,6 +54,8 @@ export const apiSlice = createApi({
     getScheme: builder.query<TableMetaData[], void>({
       query: () => ({ url: ApiEndpoints.getScheme, method: 'POST' }),
       transformResponse: (response: DBSchema): TableMetaData[] => {
+    
+        
         let tables = Object.keys(response.custom)
         let tablesMeta: TableMetaData[] = []
 
@@ -62,30 +64,36 @@ export const apiSlice = createApi({
           let tableMeta = response.custom[tableName].find((t) => t.column_name === 'table_meta_data')
             ?.meta_data as TableMetaData
 
-          const meta: TableMetaData = {
-            collection: tableName,
-            display_field: tableMeta.display_field,
-            display_template: tableMeta.display_template,
-            hidden: tableMeta.hidden,
-            fields: [],
-            translations: tableMeta.translations,
-          }
-
-          tableMeta.fields.forEach((element) => {
-            switch (element.display_template) {
-              case 'input':
-                meta.fields.push(element as Field<InputMeta>)
-                break
-              case 'select':
-                meta.fields.push(element as Field<SelectMeta>)
-                break
-              case 'timepicker':
-                meta.fields.push(element as Field<TimepickerMeta>)
-                break
+          if (tableMeta) {
+            const meta: TableMetaData = {
+              collection: tableName,
+              display_field: tableMeta.display_field,
+              display_template: tableMeta.display_template,
+              hidden: tableMeta.hidden,
+              fields: [],
+              translations: tableMeta.translations,
             }
-          })
-
-          tablesMeta.push(meta)
+  
+            tableMeta.fields.forEach((element) => {
+              switch (element.display_template) {
+                case 'input':
+                  meta.fields.push(element as Field<InputMeta>)
+                  break
+                case 'select':
+                  meta.fields.push(element as Field<SelectMeta>)
+                  break
+                case 'timepicker':
+                  meta.fields.push(element as Field<TimepickerMeta>)
+                  break
+                case 'table':
+                  console.log('table');
+                  meta.fields.push(element as Field<TableMeta>)
+                  break
+              }
+            })
+  
+            tablesMeta.push(meta)
+          }
         }
         return tablesMeta
       },

@@ -4,17 +4,17 @@ interface Translations {
 
 export interface TableMetaData {
   collection: string
-  display_field: string
-  display_template: 'list' | 'table'
+  display_field?: string
+  display_template: 'list' | 'table' | 'reference'
   hidden: boolean
-  fields: Field<InputMeta | SelectMeta | TimepickerMeta>[]
+  fields: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>[]
   translations: Translations
 }
 
 export interface Field<T> {
   field: string
   data_type: 'string' | 'int' | 'timestamp'
-  display_template: 'input' | 'select' | 'timepicker'
+  display_template: 'input' | 'select' | 'timepicker' | 'table'
   meta: T
 }
 
@@ -42,6 +42,15 @@ export interface TimepickerMeta {
   display_name: string
   editable: boolean
   icon: string
+  is_nullable: boolean
+  required: boolean
+  translations: Translations
+}
+
+export interface TableMeta {
+  editable: boolean
+  icon: string
+  columns: string[]
   is_nullable: boolean
   required: boolean
   translations: Translations

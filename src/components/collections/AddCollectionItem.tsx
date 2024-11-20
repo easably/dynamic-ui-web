@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { TableMetaData } from '../../types/tableMetaData'
 import { Box, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
-import { TableFieldSwitcher } from '../fields/TableFieldSwitcher'
+import { TableFieldEditorSwitcher } from '../fields/TableFieldSwitcher'
 import SaveIcon from '@mui/icons-material/Save'
 import { useState } from 'react'
 import { apiSlice } from '../../store/apiSlice'
@@ -71,7 +71,7 @@ export const AddCollectionItem = () => {
                   gap: 1,
                 }}>
                 <Typography variant="h6">{el.meta.translations[selectedLang]}</Typography>
-                <TableFieldSwitcher
+                <TableFieldEditorSwitcher
                   onChange={onChangeItem}
                   field={tableMeta.fields.find((e) => e.field === el.field)!}
                   value={newItems.get(el.field)}
