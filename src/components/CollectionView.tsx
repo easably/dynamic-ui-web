@@ -15,9 +15,6 @@ export const CollectionView = () => {
   const navigate = useNavigate()
   const { tableMeta } = location.state as { tableMeta: TableMetaData }
   const { data, isLoading, refetch } = useGetTableItemsQuery(tableMeta)
-
-
-  console.log(data);
   
   const onPressAddItem = () => {
     navigate(`/collections/${collectionName}/add`, { state: { tableMeta: tableMeta } })

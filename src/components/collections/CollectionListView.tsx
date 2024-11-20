@@ -17,6 +17,9 @@ export const CollectionListView: FC<CollectionViewProps> = ({ tableMeta, data, c
     const onPressCollectionItem = (id: number, itemIndex: number) => {
       navigate(`/collections/${collectionName}/${id}`, { state: { tableMeta: tableMeta, fields: data![itemIndex] } })
     }
+
+    console.log(tableMeta);
+    
   
     const primaryField = tableMeta.display_field
   

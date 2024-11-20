@@ -1,6 +1,22 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Field, InputMeta, SelectMeta, TableMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
-import { Box, Button, CircularProgress, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Fab,
+  List,
+  ListItem,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
 
 import { TableFieldEditorSwitcher } from './fields/ TableFieldEditorSwitche'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
@@ -32,6 +48,9 @@ export const CollectionItemView = () => {
           newFields.set(f.field, fields[f.field])
           break
         case 'timepicker':
+          newFields.set(f.field, fields[f.field])
+          break
+        case 'table':
           newFields.set(f.field, fields[f.field])
           break
       }
@@ -145,7 +164,6 @@ type TableFieldLookupSwitcherProps = {
 }
 
 const TableFieldLookupSwitcher: FC<TableFieldLookupSwitcherProps> = ({ value, field }) => {
-
   const convertValue = (value: any): string => {
     const parsedDate = dayjs(value, ['YYYY-MM-DDTHH:mm:ss.sssZ'], false)
     return parsedDate.isValid() ? dayjs(value).format('LLL') : String(value)
@@ -159,13 +177,48 @@ const TableFieldLookupSwitcher: FC<TableFieldLookupSwitcherProps> = ({ value, fi
     case 'timepicker':
       return <Typography variant="body1">{convertValue(value)}</Typography>
     case 'table':
-      return <div>table</div>
-      // return <TableLoockup value={value}/>
+      return <TableFieldView value={value} field={field as Field<TableMeta>} />
   }
 }
 
-const TableLoockup: FC<{value: TableMeta}> = ({value}) => {
+export const TableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<TableMeta> }> = ({ value, field }) => {
+
+  const { selectedLang } = useAppSelector((state) => state.language)
+
   return (
-    <div>{value.columns}</div>
+    <TableContainer component={Paper}>
+      <Table aria-label="table">
+        <TableHead>
+          <TableRow>
+            {field.meta.columns.map((v) => (
+              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold' }}>
+                {v}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        {value ? (
+          <TableBody>
+            {value.map((row, index) => {
+              return (
+                <TableRow key={String(row) + index}>
+                  {field.meta.columns.map((v: any) => (
+                    <TableCell key={v + 'head'}>{row[v]}</TableCell>
+                  ))}
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        ) : (
+          <TableBody>
+            <TableRow>
+              <TableCell align="center" colSpan={field.meta.columns.length}>
+                No elemets
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        )}
+      </Table>
+    </TableContainer>
   )
 }

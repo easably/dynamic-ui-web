@@ -3,6 +3,7 @@ import { Field, InputMeta, SelectMeta, TableMeta, TimepickerMeta } from '../../t
 import { InputField } from './InputField'
 import { SelectField } from './SelectField'
 import { TimepickerField } from './TimePickerField'
+import { TableFieldView } from '../CollectionItemView'
 
 type TableFieldSwitcherProps = {
   field: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>
@@ -19,6 +20,6 @@ export const TableFieldEditorSwitcher: FC<TableFieldSwitcherProps> = ({ field, v
     case 'timepicker':
       return <TimepickerField value={value} onChange={onChange} field={field as Field<TimepickerMeta>} />
     case 'table':
-      return <div>asdasd</div>
+      return <TableFieldView value={value} field={field as Field<TableMeta>} />
   }
 }

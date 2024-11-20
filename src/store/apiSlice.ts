@@ -132,8 +132,6 @@ export const apiSlice = createApi({
           fields: [`${tableMeta.collection}.id`, ...fields],
           joins: joins,
         }
-        console.log(JSON.stringify(body))
-
         return { url: ApiEndpoints.getTableItems, method: 'POST', body: body }
       },
     }),
