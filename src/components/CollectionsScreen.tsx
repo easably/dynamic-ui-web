@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { User } from '../store/authSlice'
 import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Paper } from '@mui/material'
 
 import { useGetSchemeQuery } from '../store/apiSlice'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
-import {  useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { TableMetaData } from '../types/tableMetaData'
 import { useAppSelector } from '../store/hooks'
 

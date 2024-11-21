@@ -45,7 +45,9 @@ export const App = () => {
         element: !isAuthenticated ? <LoginScreen /> : <Navigate to="/" replace />,
       },
     ],
+    
     {
+      basename: "/dynamic-ui-web/" ,
       future: {
         v7_fetcherPersist: true,
         v7_normalizeFormMethod: true,
@@ -59,6 +61,7 @@ export const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <RouterProvider
+      
         router={router}
         future={{
           v7_startTransition: true,

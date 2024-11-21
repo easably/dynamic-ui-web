@@ -1,0 +1,129 @@
+{
+    "orders": {
+        "name": {
+            "type": "text"
+        },
+        "status": {
+            "type": "text"
+        },
+        "started_at": {
+            "type": "timestamp"
+        },
+        "completed_at": {
+            "type": "timestamp"
+        },
+        "table_meta_data": {
+            "type": "json",
+            "display_template": "list",
+            "hidden": false,
+            "translations": {
+                "en": "Orders",
+                "pl": "Zamówienia",
+                "ru": "Заказы"
+            },
+            "display_field": "name",
+            "fields": [
+                {
+                    "field": "name",
+                    "data_type": "string",
+                    "display_template": "input",
+                    "meta": {
+                        "icon": "ArticleRounded",
+                        "display_name": "Name",
+                        "required": true,
+                        "editable": true,
+                        "is_nullable": false,
+                        "translations": {
+                            "en": "Name",
+                            "pl": "Nazwa",
+                            "ru": "Название"
+                        }
+                    }
+                },
+                {
+                    "field": "status",
+                    "data_type": "string",
+                    "display_template": "select",
+                    "meta": {
+                        "icon": "CalendarMonthRounded",
+                        "required": true,
+                        "editable": true,
+                        "is_nullable": false,
+                        "initaial_value": "initial",
+                        "values": [
+                            "initial",
+                            "started",
+                            "in_progress",
+                            "completed"
+                        ],
+                        "translations": {
+                            "en": "Status",
+                            "pl": "Status",
+                            "ru": "Статус"
+                        }
+                    }
+                },
+                {
+                    "field": "started_at",
+                    "data_type": "timestamp",
+                    "display_template": "timepicker",
+                    "meta": {
+                        "icon": "AccessTimeRounded",
+                        "required": true,
+                        "editable": true,
+                        "is_nullable": false,
+                        "translations": {
+                            "en": "Start time",
+                            "pl": "Кozpoczął czas",
+                            "ru": "Время начала"
+                        }
+                    }
+                },
+                {
+                    "field": "completed_at",
+                    "data_type": "timestamp",
+                    "display_template": "timepicker",
+                    "meta": {
+                        "icon": "AccessTimeRounded",
+                        "required": true,
+                        "editable": true,
+                        "is_nullable": false,
+                        "translations": {
+                            "en": "End time",
+                            "pl": "Czas końcowy",
+                            "ru": "Время окончания"
+                        }
+                    }
+                },
+                {
+                    "field": "operations",
+                    "data_type": "reference",
+                    "display_template": "table",
+                    "meta": {
+                        "icon": "FormatListNumberedRoundedIcon",
+                        "columns": ["id", "name", "duration"],
+                        "required": false,
+                        "editable": true,
+                        "is_nullable": true,
+                        "translations": {
+                            "en": "Operations",
+                            "pl": "Operacje",
+                            "ru": "Операции"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "operations": {
+        "name": {
+            "type": "text"
+        },
+        "duration": {
+            "type": "int"
+        },
+        "order_id": {
+            "type": "int"
+        }
+    }
+}
