@@ -10,7 +10,7 @@ import { useAppSelector } from '../store/hooks'
 
 export const CollectionsScreen: FC<{ user: User }> = () => {
   const { selectedLang } = useAppSelector((state) => state.language)
-  const { data, isLoading, error } = useGetSchemeQuery()
+  const { data, isLoading, error } = useGetSchemeQuery()  
 
   useEffect(() => {
     if (error) {

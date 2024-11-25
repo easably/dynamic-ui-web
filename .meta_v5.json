@@ -97,6 +97,7 @@
                 },
                 {
                     "field": "operations",
+                    "collection": "operations",
                     "data_type": "reference",
                     "display_template": "table",
                     "meta": {

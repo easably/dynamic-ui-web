@@ -1,31 +1,15 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Field, InputMeta, SelectMeta, TableMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  Fab,
-  List,
-  ListItem,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material'
+import { TableMetaData } from '../types/tableMetaData'
+import { Box, Button, CircularProgress, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
 
-import { TableFieldEditorSwitcher } from './fields/ TableFieldEditorSwitche'
+import { TableFieldEditorSwitcher } from './fields/TableFieldEditorSwitche'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import { apiSlice } from '../store/apiSlice'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
 import { FC, useState } from 'react'
-import dayjs from 'dayjs'
+import { TableFieldLookupSwitcher } from './fields/TableFieldLookupSwitcher'
 
 export const CollectionItemView = () => {
   const dispatch = useAppDispatch()
@@ -143,82 +127,29 @@ export const CollectionItemView = () => {
           ))}
         </List>
       </Paper>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Fab color="primary" aria-label="add" onClick={onPressEdit}>
-          {editMode ? (
-            loading ? (
-              <CircularProgress size="30px" color="inherit" />
-            ) : (
-              <SaveRoundedIcon />
-            )
-          ) : (
-            <EditRoundedIcon />
-          )}
-        </Fab>
-      </Box>
+      <FabButton onPressEdit={onPressEdit} loading={loading} editMode={editMode} />
     </Box>
   )
 }
 
-type TableFieldLookupSwitcherProps = {
-  field: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>
-  value: any
-}
-
-const TableFieldLookupSwitcher: FC<TableFieldLookupSwitcherProps> = ({ value, field }) => {
-  const convertValue = (value: any): string => {
-    const parsedDate = dayjs(value, ['YYYY-MM-DDTHH:mm:ss.sssZ'], false)
-    return parsedDate.isValid() ? dayjs(value).format('LLL') : String(value)
-  }
-
-  switch (field.display_template) {
-    case 'input':
-      return <Typography variant="body1">{value}</Typography>
-    case 'select':
-      return <Typography variant="body1">{value}</Typography>
-    case 'timepicker':
-      return <Typography variant="body1">{convertValue(value)}</Typography>
-    case 'table':
-      return <TableFieldView value={value} field={field as Field<TableMeta>} />
-  }
-}
-
-export const TableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<TableMeta> }> = ({ value, field }) => {
-
+const FabButton: FC<{ onPressEdit: () => void; editMode: boolean; loading: boolean }> = ({
+  onPressEdit,
+  loading,
+  editMode,
+}) => {
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="table">
-        <TableHead sx={{background: '#ffffff10'}}>
-          <TableRow>
-            {field.meta.columns.map((v) => (
-              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold', px: 2, py: 1  }}>
-                {v}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        {value ? (
-          <TableBody>
-            {value.map((row, index) => {
-              return (
-                <TableRow key={String(row) + index}>
-                  {field.meta.columns.map((v: any) => (
-                    <TableCell key={v + 'head'}>{row[v]}</TableCell>
-                  ))}
-                </TableRow>
-              )
-            })}
-          </TableBody>
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+      <Fab color="primary" aria-label="add" onClick={onPressEdit}>
+        {editMode ? (
+          loading ? (
+            <CircularProgress size="30px" color="inherit" />
+          ) : (
+            <SaveRoundedIcon />
+          )
         ) : (
-          <TableBody>
-            <TableRow>
-              <TableCell align="center" colSpan={field.meta.columns.length}>
-                No elemets
-              </TableCell>
-            </TableRow>
-          </TableBody>
+          <EditRoundedIcon />
         )}
-      </Table>
-    </TableContainer>
+      </Fab>
+    </Box>
   )
 }

@@ -1,10 +1,11 @@
 import { FC } from 'react'
 import { Field, InputMeta, SelectMeta, TableMeta, TimepickerMeta } from '../../types/tableMetaData'
-import { InputField } from './InputField'
-import { SelectField } from './SelectField'
-import { TimepickerField } from './TimePickerField'
+import { InputField } from './editableFields/InputField'
+import { SelectField } from './editableFields/SelectField'
+
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
+import { TimepickerField } from './editableFields/TimePickerField'
 
 type TableFieldSwitcherProps = {
   field: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>
@@ -32,7 +33,7 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table">
-        <TableHead  sx={{background: '#ffffff10'}}>
+        <TableHead sx={{ background: '#ffffff10' }}>
           <TableRow>
             {field.meta.columns.map((v) => (
               <TableCell key={v + 'head'} sx={{ fontWeight: 'bold', px: 2, py: 1 }}>
@@ -54,7 +55,7 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
                 )
               })
             ) : (
-              <TableRow >
+              <TableRow>
                 <TableCell align="center" colSpan={field.meta.columns.length}>
                   No elemets
                 </TableCell>

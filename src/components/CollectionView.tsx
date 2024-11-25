@@ -15,20 +15,22 @@ export const CollectionView = () => {
   const navigate = useNavigate()
   const { tableMeta } = location.state as { tableMeta: TableMetaData }
   const { data, isLoading, refetch } = useGetTableItemsQuery(tableMeta)
-  
+
   const onPressAddItem = () => {
     navigate(`/collections/${collectionName}/add`, { state: { tableMeta: tableMeta } })
   }
-  
+
+  console.log(data)
+
   useEffect(() => {
-    refetch(); 
-  }, [collectionName, refetch]);
+    refetch()
+  }, [collectionName, refetch])
 
   return (
     <Box height={'100%'}>
-      <Typography      
-          variant="h5"
-          sx={{ mt: 2, fontWeight: 'bold', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+      <Typography
+        variant="h5"
+        sx={{ mt: 2, fontWeight: 'bold', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
         {tableMeta.translations[selectedLang]}
       </Typography>
       <Paper elevation={2} sx={{ mt: 2 }}>

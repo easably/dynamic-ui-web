@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material"
 import { FC } from "react"
-import { Field, InputMeta } from "../../types/tableMetaData"
+import { Field, InputMeta } from "../../../types/tableMetaData"
 
 type InputFieldProps = {
   field: Field<InputMeta>
