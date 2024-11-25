@@ -32,14 +32,25 @@ export const TableFieldEditorSwitcher: FC<TableFieldSwitcherProps> = ({ field, v
     case 'timepicker':
       return <TimepickerField value={value} onChange={onChange} field={field as Field<TimepickerMeta>} />
     case 'table':
-      return <EditableTableFieldView value={value} field={field as Field<TableMeta>} />
+      return <EditableTableFieldView value={value} field={field as Field<TableMeta>} onChange={onChange} />
   }
 }
 
-export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<TableMeta> }> = ({
-  value,
-  field,
-}) => {
+export const EditableTableFieldView: FC<{
+  value: { [key: string]: any }[]
+  field: Field<TableMeta>
+  onChange: (key: string, value: any) => void
+}> = ({ value, field, onChange }) => {
+  const onChangeRow = (column: string, rowIndex: number, newValue: any) => {
+    let newItem = { ...value[rowIndex] }
+    newItem[column] = newValue
+
+    let newTable = Array.from(value)
+    newTable[rowIndex] = newItem
+
+    onChange(field.field, newTable)
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table">
@@ -59,10 +70,8 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
                 return (
                   <TableRow key={String(row) + index}>
                     {field.meta.columns.map((v: any) => {
-                  
-                      
                       return (
-                        <TableCell key={v + 'head'}>
+                        <TableCell key={v + 'head'} sx={{ px: 2, py: 1 }}>
                           {v === 'id' ? (
                             row[v]
                           ) : (
@@ -70,7 +79,7 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
                               variant="outlined"
                               size="small"
                               value={row[v]}
-                              onChange={(e) => console.log(e)}
+                              onChange={(e) => onChangeRow(v, index, e.target.value)}
                             />
                           )}
                         </TableCell>
