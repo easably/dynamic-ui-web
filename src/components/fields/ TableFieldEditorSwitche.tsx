@@ -3,7 +3,8 @@ import { Field, InputMeta, SelectMeta, TableMeta, TimepickerMeta } from '../../t
 import { InputField } from './InputField'
 import { SelectField } from './SelectField'
 import { TimepickerField } from './TimePickerField'
-import { TableFieldView } from '../CollectionItemView'
+import { Button, Fab, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
 
 type TableFieldSwitcherProps = {
   field: Field<InputMeta | SelectMeta | TimepickerMeta | TableMeta>
@@ -20,7 +21,55 @@ export const TableFieldEditorSwitcher: FC<TableFieldSwitcherProps> = ({ field, v
     case 'timepicker':
       return <TimepickerField value={value} onChange={onChange} field={field as Field<TimepickerMeta>} />
     case 'table':
-      return <TableFieldView value={value} field={field as Field<TableMeta>} />
+      return <EditableTableFieldView value={value} field={field as Field<TableMeta>} />
   }
-  
+}
+
+export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<TableMeta> }> = ({
+  value,
+  field,
+}) => {
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="table">
+        <TableHead>
+          <TableRow>
+            {field.meta.columns.map((v) => (
+              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold' }}>
+                {v}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        {value ? (
+          <TableBody>
+            {value.map((row, index) => {
+              return (
+                <TableRow key={String(row) + index}>
+                  {field.meta.columns.map((v: any) => (
+                    <TableCell key={v + 'head'}>{row[v]}</TableCell>
+                  ))}
+                </TableRow>
+              )
+            })}
+            <TableRow key={'add'}>
+              <TableCell align="right" colSpan={field.meta.columns.length}>
+                <Button variant="contained" color="success" startIcon={<AddIcon />}>
+                  Add
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        ) : (
+          <TableBody>
+            <TableRow>
+              <TableCell align="center" colSpan={field.meta.columns.length}>
+                No elemets
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        )}
+      </Table>
+    </TableContainer>
+  )
 }

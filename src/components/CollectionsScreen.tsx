@@ -10,7 +10,13 @@ import { useAppSelector } from '../store/hooks'
 
 export const CollectionsScreen: FC<{ user: User }> = () => {
   const { selectedLang } = useAppSelector((state) => state.language)
-  const { data, isLoading } = useGetSchemeQuery()
+  const { data, isLoading, error } = useGetSchemeQuery()
+
+  useEffect(() => {
+    if (error) {
+      console.log(error)
+    }
+  }, [error])
 
   const navigate = useNavigate()
   const onPressCollection = (collectionName: string, tableMeta: TableMetaData) => {
