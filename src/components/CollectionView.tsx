@@ -26,7 +26,9 @@ export const CollectionView = () => {
 
   return (
     <Box height={'100%'}>
-      <Typography variant="h4" sx={{ mt: 2 }}>
+      <Typography      
+          variant="h5"
+          sx={{ mt: 2, fontWeight: 'bold', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
         {tableMeta.translations[selectedLang]}
       </Typography>
       <Paper elevation={2} sx={{ mt: 2 }}>

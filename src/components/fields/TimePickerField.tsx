@@ -13,6 +13,7 @@ export const TimepickerField: FC<SelectFieldProps> = ({ value, onChange, field }
   return (
     <DateTimePicker
       label=""
+      slotProps={{ textField: { size: 'small' } }}
       defaultValue={dayjs(value)}
       value={dayjs(value)}
       sx={{ minWidth: 250 }}

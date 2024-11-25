@@ -13,6 +13,7 @@ export const InputField: FC<InputFieldProps> = ({ field, value, onChange }) => {
       <TextField
         sx={{minWidth: 250}}
         variant="outlined"
+        size="small"
         value={value}
         onChange={(e) => onChange(field.field, e.target.value)}
       />

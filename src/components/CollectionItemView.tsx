@@ -100,7 +100,9 @@ export const CollectionItemView = () => {
   return (
     <Box>
       <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography variant="h4">
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 'bold', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
           {`${tableMeta.translations[selectedLang]}: ${fields[tableMeta.display_field ?? '']}`}
         </Typography>
         <Button variant="contained" color="error" startIcon={<DeleteOutlineRoundedIcon />} onClick={onPressDelete}>
@@ -186,10 +188,10 @@ export const TableFieldView: FC<{ value: { [key: string]: any }[]; field: Field<
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table">
-        <TableHead>
+        <TableHead sx={{background: '#ffffff10'}}>
           <TableRow>
             {field.meta.columns.map((v) => (
-              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold' }}>
+              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold', px: 2, py: 1  }}>
                 {v}
               </TableCell>
             ))}

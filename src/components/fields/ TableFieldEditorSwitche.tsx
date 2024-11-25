@@ -3,7 +3,7 @@ import { Field, InputMeta, SelectMeta, TableMeta, TimepickerMeta } from '../../t
 import { InputField } from './InputField'
 import { SelectField } from './SelectField'
 import { TimepickerField } from './TimePickerField'
-import { Button, Fab, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 
 type TableFieldSwitcherProps = {
@@ -32,26 +32,34 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
   return (
     <TableContainer component={Paper}>
       <Table aria-label="table">
-        <TableHead>
+        <TableHead  sx={{background: '#ffffff10'}}>
           <TableRow>
             {field.meta.columns.map((v) => (
-              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold' }}>
+              <TableCell key={v + 'head'} sx={{ fontWeight: 'bold', px: 2, py: 1 }}>
                 {v}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        {value ? (
+        {
           <TableBody>
-            {value.map((row, index) => {
-              return (
-                <TableRow key={String(row) + index}>
-                  {field.meta.columns.map((v: any) => (
-                    <TableCell key={v + 'head'}>{row[v]}</TableCell>
-                  ))}
-                </TableRow>
-              )
-            })}
+            {value ? (
+              value.map((row, index) => {
+                return (
+                  <TableRow key={String(row) + index}>
+                    {field.meta.columns.map((v: any) => (
+                      <TableCell key={v + 'head'}>{row[v]}</TableCell>
+                    ))}
+                  </TableRow>
+                )
+              })
+            ) : (
+              <TableRow >
+                <TableCell align="center" colSpan={field.meta.columns.length}>
+                  No elemets
+                </TableCell>
+              </TableRow>
+            )}
             <TableRow key={'add'}>
               <TableCell align="right" colSpan={field.meta.columns.length}>
                 <Button variant="contained" color="success" startIcon={<AddIcon />}>
@@ -60,15 +68,7 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
               </TableCell>
             </TableRow>
           </TableBody>
-        ) : (
-          <TableBody>
-            <TableRow>
-              <TableCell align="center" colSpan={field.meta.columns.length}>
-                No elemets
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        )}
+        }
       </Table>
     </TableContainer>
   )
