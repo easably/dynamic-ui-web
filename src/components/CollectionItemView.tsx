@@ -78,6 +78,8 @@ export const CollectionItemView = () => {
   const onChangeItem = (key: string, value: any) => {
     let items = new Map(newItems)
     items.set(key, value)
+    console.log(items);
+    
     setNewItems(items)
   }
 

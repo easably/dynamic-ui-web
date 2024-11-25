@@ -3,7 +3,17 @@ import { Field, InputMeta, SelectMeta, TableMeta, TimepickerMeta } from '../../t
 import { InputField } from './editableFields/InputField'
 import { SelectField } from './editableFields/SelectField'
 
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { TimepickerField } from './editableFields/TimePickerField'
 
@@ -48,9 +58,24 @@ export const EditableTableFieldView: FC<{ value: { [key: string]: any }[]; field
               value.map((row, index) => {
                 return (
                   <TableRow key={String(row) + index}>
-                    {field.meta.columns.map((v: any) => (
-                      <TableCell key={v + 'head'}>{row[v]}</TableCell>
-                    ))}
+                    {field.meta.columns.map((v: any) => {
+                  
+                      
+                      return (
+                        <TableCell key={v + 'head'}>
+                          {v === 'id' ? (
+                            row[v]
+                          ) : (
+                            <TextField
+                              variant="outlined"
+                              size="small"
+                              value={row[v]}
+                              onChange={(e) => console.log(e)}
+                            />
+                          )}
+                        </TableCell>
+                      )
+                    })}
                   </TableRow>
                 )
               })
