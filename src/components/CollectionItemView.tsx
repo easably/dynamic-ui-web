@@ -1,15 +1,14 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { TableMetaData } from '../types/tableMetaData'
-import { Box, Button, CircularProgress, Divider, Fab, List, ListItem, Paper, Typography } from '@mui/material'
+import { Field, InputMeta, ReferenceFieldMeta, SelectMeta, TableMetaData, TimepickerMeta } from '../types/tableMetaData'
+import { Box, Button, Divider, List, ListItem, Paper, Typography } from '@mui/material'
 
 import { TableFieldEditorSwitcher } from './fields/TableFieldEditorSwitche'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import { apiSlice } from '../store/apiSlice'
-import EditRoundedIcon from '@mui/icons-material/EditRounded'
-import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
 import { FC, useState } from 'react'
 import { TableFieldLookupSwitcher } from './fields/TableFieldLookupSwitcher'
+import { FabButton } from './UI/FabButton'
 
 export const CollectionItemView = () => {
   const dispatch = useAppDispatch()
@@ -24,20 +23,22 @@ export const CollectionItemView = () => {
   const createItems = () => {
     let newFields = new Map()
     tableMeta.fields.forEach((f) => {
-      switch (f.display_template) {
-        case 'input':
-          newFields.set(f.field, fields[f.field])
-          break
-        case 'select':
-          newFields.set(f.field, fields[f.field])
-          break
-        case 'timepicker':
-          newFields.set(f.field, fields[f.field])
-          break
-        case 'table':
-          newFields.set(f.field, fields[f.field])
-          break
-      }
+      // if (f.data_type !== 'reference') {
+        switch (f.display_template) {
+          case 'input':
+            newFields.set(f.field, fields[f.field])
+            break
+          case 'select':
+            newFields.set(f.field, fields[f.field])
+            break
+          case 'timepicker':
+            newFields.set(f.field, fields[f.field])
+            break
+          case 'table':
+            newFields.set(f.field, fields[f.field])
+            break
+        }
+      // }
     })
     return newFields
   }
@@ -78,8 +79,8 @@ export const CollectionItemView = () => {
   const onChangeItem = (key: string, value: any) => {
     let items = new Map(newItems)
     items.set(key, value)
-    console.log(items);
-    
+    console.log(items)
+
     setNewItems(items)
   }
 
@@ -96,37 +97,69 @@ export const CollectionItemView = () => {
         </Button>
       </Box>
 
-      <Paper elevation={2} sx={{ mt: 2 }}>
+      <Paper elevation={1} sx={{ mt: 2 }}>
         <List disablePadding>
-          {tableMeta.fields.map((el, index) => (
-            <Box key={el.field + index}>
-              <ListItem
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  gap: 1,
-                }}>
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {el.meta.translations[selectedLang]}
-                </Typography>
-                {editMode ? (
-                  <TableFieldEditorSwitcher
-                    onChange={onChangeItem}
-                    field={tableMeta.fields.find((e) => e.field === el.field)!}
-                    value={newItems.get(el.field)}
-                  />
-                ) : (
-                  <TableFieldLookupSwitcher
-                    value={newItems.get(el.field)}
-                    field={tableMeta.fields.find((e) => e.field === el.field)!}
-                  />
-                )}
-              </ListItem>
-              {index <= tableMeta.fields.length - 2 && <Divider />}
-            </Box>
-          ))}
+          {tableMeta.fields.map((el, index) => {
+            switch (el.data_type) {
+              case 'reference':
+                return <Box key={el.field + index}>
+                <ListItem
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                  }}>
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {el.meta.translations[selectedLang]}
+                  </Typography>
+                  {editMode ? (
+                    <TableFieldEditorSwitcher
+                      onChange={onChangeItem}
+                      field={tableMeta.fields.find((e) => e.field === el.field)!}
+                      value={newItems.get(el.field)}
+                    />
+                  ) : (
+                    <TableFieldLookupSwitcher
+                      value={newItems.get(el.field)}
+                      field={tableMeta.fields.find((e) => e.field === el.field)!}
+                    />
+                  )}
+                </ListItem>
+                {index <= tableMeta.fields.length - 2 && <Divider />}
+              </Box>
+
+              default:
+                return (
+                  <Box key={el.field + index}>
+                    <ListItem
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                      }}>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                        {el.meta.translations[selectedLang]}
+                      </Typography>
+                      {editMode ? (
+                        <TableFieldEditorSwitcher
+                          onChange={onChangeItem}
+                          field={tableMeta.fields.find((e) => e.field === el.field)!}
+                          value={newItems.get(el.field)}
+                        />
+                      ) : (
+                        <TableFieldLookupSwitcher
+                          value={newItems.get(el.field)}
+                          field={tableMeta.fields.find((e) => e.field === el.field)!}
+                        />
+                      )}
+                    </ListItem>
+                    {index <= tableMeta.fields.length - 2 && <Divider />}
+                  </Box>
+                )
+            }
+          })}
         </List>
       </Paper>
       <FabButton onPressEdit={onPressEdit} loading={loading} editMode={editMode} />
@@ -134,24 +167,12 @@ export const CollectionItemView = () => {
   )
 }
 
-const FabButton: FC<{ onPressEdit: () => void; editMode: boolean; loading: boolean }> = ({
-  onPressEdit,
-  loading,
-  editMode,
-}) => {
-  return (
-    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-      <Fab color="primary" aria-label="add" onClick={onPressEdit}>
-        {editMode ? (
-          loading ? (
-            <CircularProgress size="30px" color="inherit" />
-          ) : (
-            <SaveRoundedIcon />
-          )
-        ) : (
-          <EditRoundedIcon />
-        )}
-      </Fab>
-    </Box>
-  )
+type ReferencedCollectionProps = {
+  field: Field<InputMeta | SelectMeta | TimepickerMeta | ReferenceFieldMeta>
+}
+
+const ReferencedCollection: FC<ReferencedCollectionProps> = ({ field }) => {
+  // console.log(field);
+  
+  return <div>{JSON.stringify(field)}</div>
 }

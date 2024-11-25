@@ -16,6 +16,7 @@ export interface Field<T> {
   data_type: 'string' | 'int' | 'timestamp' | 'reference'
   display_template: 'input' | 'select' | 'timepicker' | 'table'
   join?: string[]
+  collection?: string
   meta: T
 }
 

@@ -92,7 +92,7 @@ export const apiSlice = createApi({
                   meta.fields.push(element as Field<TimepickerMeta>)
                   break
                 case 'table':
-                  meta.fields.push(element as Field<TableMeta>)
+                  meta.fields.push(element as Field<ReferenceFieldMeta>)
                   break
               }
             })
@@ -113,6 +113,8 @@ export const apiSlice = createApi({
           type: string
         }> = []
         tableMeta.fields.forEach((f) => {
+          console.log(f);
+          
           if (f.data_type !== 'reference') {
             fields.push(`${tableMeta.collection}.${f.field}`)
           } else {

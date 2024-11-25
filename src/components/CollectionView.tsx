@@ -20,8 +20,6 @@ export const CollectionView = () => {
     navigate(`/collections/${collectionName}/add`, { state: { tableMeta: tableMeta } })
   }
 
-  console.log(data)
-
   useEffect(() => {
     refetch()
   }, [collectionName, refetch])
