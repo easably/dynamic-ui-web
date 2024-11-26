@@ -41,6 +41,8 @@ export const EditableTableFieldView: FC<{
   field: Field<TableMeta>
   onChange: (key: string, value: any) => void
 }> = ({ value, field, onChange }) => {
+
+
   const onChangeRow = (column: string, rowIndex: number, newValue: any) => {
     let newItem = { ...value[rowIndex] }
     newItem[column] = newValue
@@ -50,6 +52,12 @@ export const EditableTableFieldView: FC<{
 
     onChange(field.field, newTable)
   }
+
+
+  const onPressAddItem = () => {
+    
+  }
+
 
   return (
     <TableContainer component={Paper}>
@@ -97,7 +105,7 @@ export const EditableTableFieldView: FC<{
             )}
             <TableRow key={'add'}>
               <TableCell align="right" colSpan={field.meta.columns.length}>
-                <Button variant="contained" color="success" startIcon={<AddIcon />}>
+                <Button variant="contained" color="success" startIcon={<AddIcon />} onClick={onPressAddItem}>
                   Add
                 </Button>
               </TableCell>

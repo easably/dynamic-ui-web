@@ -112,9 +112,7 @@ export const apiSlice = createApi({
           second: string
           type: string
         }> = []
-        tableMeta.fields.forEach((f) => {
-          console.log(f);
-          
+        tableMeta.fields.forEach((f) => {          
           if (f.data_type !== 'reference') {
             fields.push(`${tableMeta.collection}.${f.field}`)
           } else {
